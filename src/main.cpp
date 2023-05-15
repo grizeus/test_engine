@@ -5,6 +5,7 @@
 int main(int argc, char** argv) {
     SDL_Window* window;
     SDL_Surface* surface;
+    SDL_Renderer* renderer;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0){ 
         std::cout << "Can't init video" << std::endl;
@@ -22,10 +23,24 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // create surface
-    surface = SDL_GetWindowSurface(window);
-    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 0, 0xFF, 0));
-    SDL_Delay(6000);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if(!renderer) {
+        std::cout <<"Can't create renderer!\n";
+        return 1;
+    }
+    // Set background color to turquoise
+    SDL_SetRenderDrawColor(renderer, 64, 224, 208, 255);
+    // Clear screen
+    SDL_RenderClear(renderer);
+    // update screen
+    SDL_RenderPresent(renderer);
+    
+    SDL_Delay(3000);
+
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
+    IMG_Quit();
 
     return 0;
 }
